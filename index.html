@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nailong Panel — Sewa Bot WhatsApp JB & JPM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <span class="logo-icon">🦁</span>
+        <span>NAILONG <strong>PANEL</strong></span>
+      </a>
+      <div class="nav-links">
+        <a href="#fitur">Fitur</a>
+        <a href="#harga">Harga</a>
+        <a href="#cara">Cara Kerja</a>
+        <a href="#faq">FAQ</a>
+      </div>
+      <div class="nav-actions">
+        <button class="btn btn-ghost" id="btnLogin" onclick="showModal('login')">Masuk</button>
+        <button class="btn btn-primary" id="btnRegister" onclick="showModal('register')">Daftar</button>
+        <button class="btn btn-primary hidden" id="btnDashboard" onclick="goDashboard()">Dashboard</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge">⚡ BOT JB & JPM • PAIRING FIX V2</div>
+    <h1>Punya Bot WhatsApp<br><span class="highlight">Sendiri</span> Tanpa Ribet</h1>
+    <p class="hero-desc">
+      Platform sewa bot Nailong siap pakai. Pilih versi <strong>JB (Group)</strong> atau <strong>JPM (Broadcast)</strong>,
+      custom nama + foto menu, jalan 24 jam di VPS kami.
+    </p>
+    <div class="hero-cta">
+      <button class="btn btn-primary btn-lg" onclick="showModal('register')">🚀 Mulai Gratis 18 Jam</button>
+      <button class="btn btn-outline btn-lg" onclick="document.getElementById('harga').scrollIntoView({behavior:'smooth'})">Lihat Harga</button>
+    </div>
+    <div class="stats-bar">
+      <div class="stat"><span class="stat-label">UPTIME</span><span class="stat-value">99.9%</span></div>
+      <div class="stat"><span class="stat-label">MODE</span><span class="stat-value">JB + JPM</span></div>
+      <div class="stat"><span class="stat-label">PAYMENT</span><span class="stat-value">QRIS Casaku</span></div>
+    </div>
+  </section>
+
+  <!-- FITUR -->
+  <section id="fitur" class="section">
+    <h2 class="section-title">Fitur Unggulan</h2>
+    <div class="cards">
+      <div class="card">
+        <div class="card-icon">📱</div>
+        <h3>Pairing Code</h3>
+        <p>Tautkan nomor WhatsApp lewat kode pairing resmi. Tidak perlu scan QR terus-menerus.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📢</div>
+        <h3>Bot JPM</h3>
+        <p>Broadcast massal, auto JPM, push kontak, blacklist, autoreply — cocok promosi.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🛡️</div>
+        <h3>Bot JB / Group</h3>
+        <p>Jaga grup: antilink, antivirtex, welcome, tagall, admin tools, absen, dll.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🎮</div>
+        <h3>Games & Alat</h3>
+        <p>Tebak game, stiker, downloader TikTok/IG/YT, HD, brat, undian, dan banyak lagi.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🖼️</div>
+        <h3>Custom Nama & Foto</h3>
+        <p>Request nama bot + foto yang muncul saat orang ketik .menu / .profile.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📊</div>
+        <h3>Monitor Realtime</h3>
+        <p>Pantau status bot, sisa masa aktif, sisa kuota link grup dari dashboard.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CARA -->
+  <section id="cara" class="section section-alt">
+    <h2 class="section-title">Hanya 3 Langkah</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Daftar & Buat Bot</h3>
+        <p>Pilih tipe JB atau JPM, isi nama bot, upload foto menu (opsional). Akun baru dapat trial 18 jam gratis.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Bayar via QRIS</h3>
+        <p>Pilih paket, scan QRIS Casaku. Setelah lunas, bot otomatis aktif & masa sewa diperpanjang.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Pairing & Jalan</h3>
+        <p>Ambil pairing code di dashboard, masukkan di WhatsApp → Perangkat Tertaut. Bot online 24 jam.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HARGA -->
+  <section id="harga" class="section">
+    <h2 class="section-title">Harga Sewa</h2>
+    <p class="section-sub">Semua paket sudah termasuk server VPS + script Nailong. Bayar cukup scan QRIS.</p>
+    <div class="price-grid" id="priceGrid">
+      <!-- filled by JS -->
+    </div>
+    <div class="addon-box">
+      <h4>Add-on Kuota Link Grup</h4>
+      <p>Habis kuota link? Tambah saja: <strong>Rp 800</strong> (+2 link) atau <strong>Rp 1.600</strong> (+4 link)</p>
+    </div>
+  </section>
+
+  <!-- CONTACT (disamarkan) -->
+  <section class="section section-alt">
+    <h2 class="section-title">Butuh Bantuan / Sewa Manual?</h2>
+    <div class="contact-cards">
+      <div class="contact-card">
+        <h3>OWNER SEWA BOT BY NAILONG</h3>
+        <p>Hubungi owner resmi untuk bantuan teknis atau sewa langsung.</p>
+        <button class="btn btn-outline" onclick="alert('Silakan hubungi via Bot Telegram atau Website Resmi. Nomor tidak ditampilkan untuk keamanan.')">Hubungi Owner</button>
+      </div>
+      <div class="contact-card">
+        <h3>SEWA LEWAT BOT TELEGRAM</h3>
+        <p>Order & bayar langsung dari bot Telegram Nailong (lebih cepat).</p>
+        <button class="btn btn-outline" onclick="alert('Buka bot Telegram Nailong (username tidak ditampilkan di sini). Cari di channel resmi.')">Buka Bot Telegram</button>
+      </div>
+      <div class="contact-card">
+        <h3>SEWA LEWAT WEBSITE RESMI NAILONG</h3>
+        <p>Gunakan dashboard ini — paling mudah & otomatis.</p>
+        <button class="btn btn-primary" onclick="showModal('register')">Sewa Sekarang</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="section">
+    <h2 class="section-title">FAQ</h2>
+    <div class="faq-list">
+      <details><summary>Apa beda bot JB dan JPM?</summary><p>JB fokus fitur grup (antilink, welcome, admin). JPM fokus broadcast & marketing (autojpm, pushkontak, blacklist).</p></details>
+      <details><summary>Trial 18 jam gratis?</summary><p>Ya, akun baru yang belum pernah trial mendapat 18 jam gratis saat buat bot pertama. Setelah habis, sewa paket berbayar.</p></details>
+      <details><summary>Apakah HP harus online terus?</summary><p>Tidak. Setelah pairing berhasil, bot jalan di VPS kami 24 jam. HP boleh dimatikan.</p></details>
+      <details><summary>Bisa request nama & foto bot?</summary><p>Bisa. Saat buat bot, isi nama yang diinginkan dan upload foto. Foto muncul di balasan .menu / .profile.</p></details>
+      <details><summary>Pembayaran apa saja?</summary><p>Hanya QRIS via Casaku (semua e-wallet & m-banking yang support QRIS).</p></details>
+      <details><summary>Limit link grup berapa?</summary><p>Harian 2x, mingguan 4x, bulanan 6x, tahunan 8x. Bisa beli add-on jika habis.</p></details>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>© 2026 Nailong Panel • Sewa Bot WhatsApp JB & JPM</p>
+    <p class="muted">Payment powered by Casaku QRIS</p>
+  </footer>
+
+  <!-- MODALS -->
+  <div class="modal-overlay hidden" id="modalOverlay">
+    <div class="modal" id="modalBox">
+      <button class="modal-close" onclick="hideModal()">×</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD (hidden by default) -->
+  <div id="dashboardView" class="hidden">
+    <div class="dash-header">
+      <h2>Dashboard <span id="dashUser"></span></h2>
+      <button class="btn btn-ghost" onclick="logout()">Keluar</button>
+    </div>
+    <div class="dash-grid">
+      <div class="dash-card">
+        <h3>Bot Saya</h3>
+        <div id="botList"></div>
+        <button class="btn btn-primary" style="margin-top:1rem" onclick="showCreateBot()">+ Buat Bot Baru</button>
+      </div>
+      <div class="dash-card">
+        <h3>Pesanan</h3>
+        <div id="orderList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-auth-compat.js"></script>
+  <script src="/js/firebase-config.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
