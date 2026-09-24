@@ -396,19 +396,45 @@ function escapeHtml(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
+const FALLBACK_PACKAGES = [
+  { name: '1 Jam', price: 2000, link_limit: 2 },
+  { name: '2 Jam', price: 4000, link_limit: 2 },
+  { name: '3 Jam', price: 6000, link_limit: 2 },
+  { name: '4 Jam', price: 8000, link_limit: 2 },
+  { name: '5 Jam', price: 10000, link_limit: 2 },
+  { name: '1 Minggu', price: 12000, link_limit: 4 },
+  { name: '2 Minggu', price: 14000, link_limit: 4 },
+  { name: '3 Minggu', price: 16000, link_limit: 4 },
+  { name: '4 Minggu', price: 18000, link_limit: 4 },
+  { name: '5 Minggu', price: 20000, link_limit: 4 },
+  { name: '1 Bulan', price: 22000, link_limit: 6 },
+  { name: '2 Bulan', price: 24000, link_limit: 6 },
+  { name: '3 Bulan', price: 26000, link_limit: 6 },
+  { name: '4 Bulan', price: 28000, link_limit: 6 },
+  { name: '5 Bulan', price: 30000, link_limit: 6 },
+  { name: '1 Tahun', price: 78000, link_limit: 8 },
+  { name: '2 Tahun', price: 110000, link_limit: 8 },
+];
+
+function renderPrices(packages) {
+  const grid = document.getElementById('priceGrid');
+  if (!grid) return;
+  grid.innerHTML = packages.map(p => `
+    <div class="price-card">
+      <div class="pname">${p.name}</div>
+      <div class="pprice">Rp ${Number(p.price).toLocaleString('id-ID')}</div>
+      <div class="plink">${p.link_limit}x link grup</div>
+    </div>
+  `).join('');
+}
+
 async function loadPrices() {
   try {
     const { packages } = await api('/api/bots/packages');
-    const grid = document.getElementById('priceGrid');
-    if (!grid) return;
-    grid.innerHTML = packages.filter(p => !p.code.startsWith('addon')).map(p => `
-      <div class="price-card">
-        <div class="pname">${p.name}</div>
-        <div class="pprice">Rp ${p.price.toLocaleString('id-ID')}</div>
-        <div class="plink">${p.link_limit}x link grup</div>
-      </div>
-    `).join('');
-  } catch {}
+    renderPrices(packages.filter(p => !String(p.code||'').startsWith('addon')));
+  } catch {
+    renderPrices(FALLBACK_PACKAGES);
+  }
 }
 
 // Init
