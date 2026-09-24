@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Custom Bot — Sewabot Nailong</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <nav class="nav" id="siteNav"></nav>
+  <div class="pay-wrap">
+    <div class="panel">
+      <h2 style="color:var(--gold)">Custom / Buat Bot</h2>
+      <p style="color:var(--muted);font-size:.9rem;margin-bottom:1rem">Pilih JB atau JPM. Trial 18 jam untuk akun baru.</p>
+      <form onsubmit="submitBot(event)">
+        <div class="form-group"><label>Nama Bot</label><input name="bot_name" required placeholder="Nailong Gembul"></div>
+        <div class="form-group"><label>Tipe</label>
+          <select name="bot_type" required>
+            <option value="JB">JB — Group</option>
+            <option value="JPM">JPM — Broadcast</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Foto Menu (opsional)</label><input type="file" name="photo" accept="image/*"></div>
+        <button class="btn btn-primary btn-block">Buat Bot</button>
+        <p class="form-error" id="err"></p>
+      </form>
+    </div>
+  </div>
+  <script src="js/config.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/nav.js"></script>
+  <script>
+    renderNav({ active: 'custom', showAuth: false });
+    requireAuth();
+    async function submitBot(e) {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      try {
+        const res = await fetch((window.API_BASE||'') + '/api/bots/create', { method:'POST', credentials:'include', body: fd });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Gagal');
+        if (data.trial) alert('Trial 18 jam aktif!');
+        location.href = 'pairing.html?id=' + data.bot.id;
+      } catch (err) { document.getElementById('err').textContent = err.message; }
+    }
+  </script>
+</body>
+</html>

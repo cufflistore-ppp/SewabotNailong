@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Harga — Sewabot Nailong</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <nav class="nav" id="siteNav"></nav>
+  <div class="page-title">
+    <h1>Daftar Harga</h1>
+    <p>Trial 18 jam gratis · Bayar QRIS Casaku</p>
+  </div>
+  <section class="section" style="padding-top:1.5rem">
+    <div class="price-grid" id="grid"></div>
+    <div class="owner-box">
+      <h3>OWNER SEWA BOT BY NAILONG</h3>
+      <div class="line">SEWA LEWAT BOT TELEGRAM</div>
+      <div class="line">SEWA LEWAT WEBSITE RESMI NAILONG</div>
+    </div>
+    <p style="text-align:center;margin-top:1.5rem">
+      <a href="register.html" class="btn btn-primary btn-lg">Mulai Gratis 18 Jam</a>
+    </p>
+  </section>
+  <footer class="footer">© 2026 sewabotnailong.my.id</footer>
+  <script src="js/config.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/nav.js"></script>
+  <script>
+    renderNav({ active: 'harga' });
+    document.getElementById('grid').innerHTML = window.PACKAGES.filter(p => !p.code.startsWith('addon')).map(p => `
+      <div class="price-card">
+        <div class="name">${p.name}</div>
+        <div class="price">Rp ${p.price.toLocaleString('id-ID')}</div>
+        <div class="link">${p.link_limit}x link grup</div>
+      </div>
+    `).join('');
+  </script>
+</body>
+</html>

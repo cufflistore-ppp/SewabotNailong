@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — Sewabot Nailong</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <nav class="nav" id="siteNav"></nav>
+  <div class="dash">
+    <div class="dash-head">
+      <div>
+        <h1>Dashboard</h1>
+        <p class="dash-user" id="subLabel">Kelola bot sewa kamu</p>
+      </div>
+      <a href="create-bot.html" class="btn btn-primary">Buat Bot</a>
+    </div>
+    <div class="dash-grid">
+      <div class="panel">
+        <h2>Bot Saya</h2>
+        <div id="botList"><p style="color:var(--muted)">Memuat...</p></div>
+      </div>
+      <div class="panel">
+        <h2>Riwayat Pesanan</h2>
+        <div id="orderList"><p style="color:var(--muted)">Memuat...</p></div>
+      </div>
+    </div>
+  </div>
+  <script src="js/config.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/nav.js"></script>
+  <script>
+    renderNav({ active: 'saya', showAuth: false });
+    (async () => {
+      const me = await requireAuth();
+      if (!me) return;
+      document.getElementById('subLabel').textContent = '@' + me.username + (me.trial_used ? '' : ' · Trial tersedia');
+      try {
+        const { bots } = await api('/api/bots');
+        const el = document.getElementById('botList');
+        if (!bots?.length) {
+          el.innerHTML = '<p style="color:var(--muted)">Belum ada bot. <a href="create-bot.html" style="color:var(--gold)"><strong>Buat sekarang</strong></a></p>';
+        } else {
+          el.innerHTML = bots.map(b => `
+            <div class="bot-row">
+              <div class="name">${escapeHtml(b.bot_name)} <span class="badge-pill badge-${b.status}">${b.status}</span> · ${b.bot_type}</div>
+              <div class="meta">${b.expires_at ? 's/d ' + new Date(b.expires_at).toLocaleString('id-ID') : 'Belum aktif'} · Link ${b.link_used}/${b.link_limit}</div>
+              <div class="actions">
+                <a class="btn btn-sm btn-primary" href="pairing.html?id=${b.id}">Pairing</a>
+                <a class="btn btn-sm btn-outline" href="payment.html?bot=${b.id}">Bayar</a>
+              </div>
+            </div>
+          `).join('');
+        }
+      } catch (e) { document.getElementById('botList').innerHTML = '<p class="form-error">'+e.message+'</p>'; }
+      try {
+        const { orders } = await api('/api/payment/orders');
+        const el = document.getElementById('orderList');
+        if (!orders?.length) el.innerHTML = '<p style="color:var(--muted)">Belum ada pesanan.</p>';
+        else el.innerHTML = orders.slice(0,12).map(o => `
+          <div class="bot-row">
+            <div class="name">${escapeHtml(o.package_name||o.package_code)} · ${money(o.total_amount||o.amount)}</div>
+            <div class="meta">${o.transaction_id||'-'} · <span class="badge-pill badge-${o.status}">${o.status}</span></div>
+          </div>
+        `).join('');
+      } catch {}
+    })();
+  </script>
+</body>
+</html>

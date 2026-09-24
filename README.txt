@@ -1,11 +1,18 @@
-DEPLOY KE VERCEL:
-1. Upload SELURUH isi folder ini (index.html, css/, js/) ke root project Vercel
-2. Jangan taruh di dalam subfolder lagi
-3. Build Command: (kosongkan)
-4. Output Directory: .  atau biarkan default
+SEWABOT NAILONG — Website Dark Gold Theme
 
-Kalau CSS masih 404, pastikan struktur di Vercel:
-  /index.html
-  /css/style.css
-  /js/app.js
-  /js/firebase-config.js
+Logo: img/logo.png (banner karakter, bukan kotak)
+
+Menu hamburger (kanan atas):
+  - Status Bot
+  - Saya (dashboard)
+  - Sewa Bot (payment)
+  - Custom Bot
+  - Donasi
+  - Pusat Info
+  - Harga / FAQ
+
+Warna: background hitam + aksen kuning keemasan
+
+Deploy Vercel:
+1. Upload isi folder nailong-web ke ROOT
+2. Edit js/config.js → API_BASE = URL panel VPS

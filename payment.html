@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sewa Bot — Sewabot Nailong</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <nav class="nav" id="siteNav"></nav>
+  <div class="pay-wrap">
+    <div class="panel" id="step1">
+      <h2 style="color:var(--gold)">Sewa / Perpanjang</h2>
+      <p style="color:var(--muted);font-size:.88rem;margin-bottom:1rem">Bayar via QRIS Casaku</p>
+      <div class="form-group"><label>Bot</label><select id="botSelect"></select></div>
+      <div class="pkg-list" id="pkgList"></div>
+      <p class="form-error" id="err"></p>
+    </div>
+    <div class="panel hidden" id="step2">
+      <h2 style="color:var(--gold)">Scan QRIS</h2>
+      <div class="qr-box">
+        <div id="qrImg"></div>
+        <div class="qr-amount" id="qrAmount"></div>
+        <p style="font-size:.85rem;color:var(--muted)" id="qrTrx"></p>
+      </div>
+      <button class="btn btn-primary btn-block" onclick="checkStatus()">Cek Status</button>
+      <button class="btn btn-ghost btn-block" style="margin-top:.5rem" onclick="document.getElementById('step2').classList.add('hidden');document.getElementById('step1').classList.remove('hidden')">← Kembali</button>
+      <p class="form-error" id="err2"></p>
+    </div>
+  </div>
+  <script src="js/config.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/nav.js"></script>
+  <script>
+    renderNav({ active: 'sewa', showAuth: false });
+    let currentTrx = null;
+    (async () => {
+      await requireAuth();
+      const pre = new URLSearchParams(location.search).get('bot');
+      let bots = [];
+      try { bots = (await api('/api/bots')).bots || []; } catch {}
+      const sel = document.getElementById('botSelect');
+      sel.innerHTML = bots.length
+        ? bots.map(b => `<option value="${b.id}" ${pre==b.id?'selected':''}>${escapeHtml(b.bot_name)} (${b.bot_type})</option>`).join('')
+        : '<option value="">Buat bot dulu</option>';
+      document.getElementById('pkgList').innerHTML = window.PACKAGES.map(p => `
+        <button type="button" class="pkg-btn" onclick="pay('${p.code}')">
+          <span>${p.name}${p.code.startsWith('addon')?'':' · '+p.link_limit+'x link'}</span>
+          <strong>${money(p.price)}</strong>
+        </button>
+      `).join('');
+    })();
+    async function pay(code) {
+      const botId = document.getElementById('botSelect').value;
+      if (!botId) { document.getElementById('err').textContent = 'Pilih bot dulu'; return; }
+      try {
+        const data = await api('/api/payment/create', { method:'POST', body: JSON.stringify({ package_code: code, bot_id: Number(botId) }) });
+        currentTrx = data.transaction_id;
+        document.getElementById('step1').classList.add('hidden');
+        document.getElementById('step2').classList.remove('hidden');
+        document.getElementById('qrAmount').textContent = money(data.amount);
+        document.getElementById('qrTrx').textContent = 'ID: ' + data.transaction_id;
+        let html = data.qr_image
+          ? '<img src="data:image/png;base64,'+data.qr_image+'" alt="QRIS">'
+          : data.qr_string
+            ? '<img src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data='+encodeURIComponent(data.qr_string)+'" alt="QRIS">'
+            : '<p>QR tidak tersedia</p>';
+        document.getElementById('qrImg').innerHTML = html;
+      } catch (e) { document.getElementById('err').textContent = e.message; }
+    }
+    async function checkStatus() {
+      if (!currentTrx) return;
+      try {
+        const { order } = await api('/api/payment/status/' + currentTrx);
+        if (order.status === 'paid') { alert('Berhasil!'); location.href = 'dashboard.html'; }
+        else document.getElementById('err2').textContent = 'Masih pending';
+      } catch (e) { document.getElementById('err2').textContent = e.message; }
+    }
+  </script>
+</body>
+</html>
